@@ -563,7 +563,7 @@ SimulationModel::~SimulationModel()
 
         //Check for collisions
         bool collided = checkOwnShipCollision();
-
+        bool sunk = checkOwnShipSunk();
 
         //update water position
         water.update(tideHeight,camera.getPosition(),light.getLightLevel(), weather);
@@ -609,9 +609,18 @@ SimulationModel::~SimulationModel()
         irr::f32 elevAngle = -1*ownShip.getPitch()*cos(lookRadians) + ownShip.getRoll()*sin(lookRadians) + camera.getLookUp();
 
         //send data to gui
-        guiMain->updateGuiData(getLat(), getLong(), ownShip.getHeading(), camera.getLook(), elevAngle, ownShip.getSpeed(), ownShip.getPortEngine(), ownShip.getStbdEngine(), ownShip.getRudder(), ownShip.getDepth(), weather, rainIntensity, radarCalculation.getRangeNm(), radarCalculation.getGain(), radarCalculation.getClutter(), radarCalculation.getRainClutter(), radarCalculation.getEBLBrg(), radarCalculation.getEBLRangeNm(), Utilities::timestampToString(absoluteTime), paused, collided); //Set GUI heading in degrees and speed (in m/s)
+        guiMain->updateGuiData(getLat(), getLong(), ownShip.getHeading(), camera.getLook(), elevAngle, ownShip.getSpeed(), ownShip.getPortEngine(), ownShip.getStbdEngine(), ownShip.getRudder(), ownShip.getDepth(), weather, rainIntensity, radarCalculation.getRangeNm(), radarCalculation.getGain(), radarCalculation.getClutter(), radarCalculation.getRainClutter(), radarCalculation.getEBLBrg(), radarCalculation.getEBLRangeNm(), Utilities::timestampToString(absoluteTime), paused, collided, sunk); //Set GUI heading in degrees and speed (in m/s)
     }
 
+    bool SimulationModel::checkOwnShipSunk()
+    {
+        if(ownShip.isSunk()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     bool SimulationModel::checkOwnShipCollision()
     {
 
@@ -666,5 +675,9 @@ SimulationModel::~SimulationModel()
         }
 
         return false; //If no collision has been found
+    }
+    void SimulationModel::sinkOwnShip()
+    {
+        ownShip.sink();
     }
 

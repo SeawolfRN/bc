@@ -57,8 +57,9 @@ public:
     void hide2dInterface();
     void hideStbdEngineBar(); //Used for single engine operation
     void hideEngineAndRudder(); //Used for secondary mode
-    void updateGuiData(irr::f32 lat, irr::f32 longitude, irr::f32 hdg, irr::f32 viewAngle, irr::f32 viewElevationAngle, irr::f32 spd, irr::f32 portEng, irr::f32 stbdEng, irr::f32 rudder, irr::f32 depth, irr::f32 weather, irr::f32 rain, irr::f32 radarRangeNm, irr::f32 radarGain, irr::f32 radarClutter, irr::f32 radarRain, irr::f32 guiRadarEBLBrg, irr::f32 guiRadarEBLRangeNm, std::string currentTime, bool paused,  bool collided);
+    void updateGuiData(irr::f32 lat, irr::f32 longitude, irr::f32 hdg, irr::f32 viewAngle, irr::f32 viewElevationAngle, irr::f32 spd, irr::f32 portEng, irr::f32 stbdEng, irr::f32 rudder, irr::f32 depth, irr::f32 weather, irr::f32 rain, irr::f32 radarRangeNm, irr::f32 radarGain, irr::f32 radarClutter, irr::f32 radarRain, irr::f32 guiRadarEBLBrg, irr::f32 guiRadarEBLRangeNm, std::string currentTime, bool paused,  bool collided, bool sunk);
     void drawGUI();
+    void quitSim();
 
 
 private:
@@ -107,6 +108,7 @@ private:
     std::string guiTime;
     bool guiPaused;
     bool guiCollided;
+    bool guiSunk;
     bool showInterface;
 
     Lang* language;
@@ -115,6 +117,7 @@ private:
     void draw2dRadar();
     void draw2dBearing();
     void drawCollisionWarning();
+    void drawSunkWarning();
     std::wstring f32To1dp(irr::f32 value);
     std::wstring f32To2dp(irr::f32 value);
     std::wstring f32To3dp(irr::f32 value);

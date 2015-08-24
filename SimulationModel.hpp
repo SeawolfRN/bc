@@ -128,6 +128,8 @@ public:
     std::string getScenarioName() const;
     std::string getWorldName() const;
     void update();
+    void sinkOwnShip();
+    bool checkOwnShipSunk();
 
 private:
     irr::IrrlichtDevice* device;

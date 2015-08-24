@@ -24,26 +24,26 @@
 using namespace irr;
 
     MyEventReceiver::MyEventReceiver(irr::IrrlichtDevice* dev, SimulationModel* model, GUIMain* gui, irr::u32 portJoystickAxis, irr::u32 stbdJoystickAxis, irr::u32 rudderJoystickAxis) //Constructor
-	{
-		this->model = model; //Link to the model
-		this->gui = gui; //Link to GUI (Not currently used!)
-		scrollBarPosSpeed = 0;
-		scrollBarPosHeading = 0;
+    {
+        this->model = model; //Link to the model
+        this->gui = gui; //Link to GUI (Not currently used!)
+        scrollBarPosSpeed = 0;
+        scrollBarPosHeading = 0;
 
-		//set up joystick if present
-		dev->activateJoysticks(joystickInfo);
-		previousJoystickLoaded = false;
-		this->portJoystickAxis=portJoystickAxis;
-		this->stbdJoystickAxis=stbdJoystickAxis;
-		this->rudderJoystickAxis=rudderJoystickAxis;
-	}
+        //set up joystick if present
+        dev->activateJoysticks(joystickInfo);
+        previousJoystickLoaded = false;
+        this->portJoystickAxis=portJoystickAxis;
+        this->stbdJoystickAxis=stbdJoystickAxis;
+        this->rudderJoystickAxis=rudderJoystickAxis;
+    }
 
     bool MyEventReceiver::OnEvent(const SEvent& event)
-	{
+    {
 
         if (event.EventType == EET_GUI_EVENT)
-		{
-			s32 id = event.GUIEvent.Caller->getID();
+        {
+            s32 id = event.GUIEvent.Caller->getID();
             if (event.GUIEvent.EventType==gui::EGET_SCROLL_BAR_CHANGED)
             {
 
@@ -151,7 +151,7 @@ using namespace irr;
 
         //From keyboard
         if (event.EventType == EET_KEY_INPUT_EVENT && event.KeyInput.PressedDown)
-		{
+        {
 
             if (event.KeyInput.Shift) {
                 //Shift down
@@ -235,14 +235,22 @@ using namespace irr;
                         gui->toggleShow2dInterface();
                         break;
 
+                    case KEY_KEY_Q:
+                        gui->quitSim();
+                        break;
+
+                    case KEY_KEY_S:
+                        // Sink the ship here
+                        model->sinkOwnShip();
+                        break;
                     default:
                         //don't do anything
                         break;
                 }
             }
-		}
+        }
 
-		//From joystick (actually polled, once per run():
+        //From joystick (actually polled, once per run():
         if (event.EventType == EET_JOYSTICK_INPUT_EVENT) {
             u32 numberOfAxes = event.JoystickEvent.NUMBER_OF_AXES;
             //Do joystick stuff here
@@ -293,13 +301,13 @@ using namespace irr;
 
 
 /*
-	s32 MyEventReceiver::GetScrollBarPosSpeed() const
-	{
-		return scrollBarPosSpeed;
-	}
+    s32 MyEventReceiver::GetScrollBarPosSpeed() const
+    {
+        return scrollBarPosSpeed;
+    }
 
-	s32 MyEventReceiver::GetScrollBarPosHeading() const
-	{
-		return scrollBarPosHeading;
-	}
+    s32 MyEventReceiver::GetScrollBarPosHeading() const
+    {
+        return scrollBarPosHeading;
+    }
 */

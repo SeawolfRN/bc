@@ -42,7 +42,8 @@ class Ship
         irr::f32 getSpeed() const;
         void moveNode(irr::f32 deltaX, irr::f32 deltaY, irr::f32 deltaZ);
         void setPosition(irr::f32 xPos, irr::f32 yPos);
-
+        void sink();
+        bool isSunk();
     protected:
 
         irr::scene::IMeshSceneNode* ship; //The scene node for the own ship.
@@ -55,6 +56,7 @@ class Ship
         irr::f32 width;
         int controlMode;
         bool positionManuallyUpdated; //If position has been updated, and shouldn't be updated again this loop
+        bool sunk; // Are we sunk?
         enum CONTROL_MODE// Define some values that we'll use to identify individual GUI controls.
         {
             MODE_AUTO = 0,

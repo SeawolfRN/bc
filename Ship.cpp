@@ -28,6 +28,8 @@ Ship::Ship()
     //Default to run on defined spd and hdg
     controlMode = MODE_AUTO;
     positionManuallyUpdated = false; //Used to track if position has been manually updated, and shouldn't have position update applied this loop
+    this->sunk = false; // We start off not sunk
+
 }
 
 Ship::~Ship()
@@ -93,11 +95,24 @@ irr::f32 Ship::getSpeed() const
 
 void Ship::moveNode(irr::f32 deltaX, irr::f32 deltaY, irr::f32 deltaZ)
 {
-    xPos += deltaX;
-    yPos += deltaY;
-    zPos += deltaZ;
-    ship->setPosition(core::vector3df(xPos,yPos,zPos));
+    if(!this->sunk){ // Don't move if we're sunk
+        xPos += deltaX;
+        yPos += deltaY;
+        zPos += deltaZ;
+        ship->setPosition(core::vector3df(xPos,yPos,zPos));
+    }
+    else{ // Sink down
+        zPos -= 0.1;
+        ship->setPosition(core::vector3df(xPos,yPos,zPos));
+
+    }
+}
+bool Ship::isSunk()
+{
+    return this->sunk;
 }
 
-
-
+void Ship::sink()
+{
+    this->sunk = true; // Sink the Ship - Oh no...
+}

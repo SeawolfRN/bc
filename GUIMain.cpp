@@ -208,7 +208,7 @@ GUIMain::GUIMain(IrrlichtDevice* device, Lang* language)
         return device->postEventFromUser(triggerUpdateEvent);
     }
 
-    void GUIMain::updateGuiData(irr::f32 lat, irr::f32 longitude, irr::f32 hdg, irr::f32 viewAngle, irr::f32 viewElevationAngle, irr::f32 spd, irr::f32 portEng, irr::f32 stbdEng, irr::f32 rudder, irr::f32 depth, irr::f32 weather, irr::f32 rain, irr::f32 radarRangeNm, irr::f32 radarGain, irr::f32 radarClutter, irr::f32 radarRain, irr::f32 guiRadarEBLBrg, irr::f32 guiRadarEBLRangeNm, std::string currentTime, bool paused, bool collided)
+    void GUIMain::updateGuiData(irr::f32 lat, irr::f32 longitude, irr::f32 hdg, irr::f32 viewAngle, irr::f32 viewElevationAngle, irr::f32 spd, irr::f32 portEng, irr::f32 stbdEng, irr::f32 rudder, irr::f32 depth, irr::f32 weather, irr::f32 rain, irr::f32 radarRangeNm, irr::f32 radarGain, irr::f32 radarClutter, irr::f32 radarRain, irr::f32 guiRadarEBLBrg, irr::f32 guiRadarEBLRangeNm, std::string currentTime, bool paused, bool collided, bool sunk)
     {
         //Update scroll bars
         hdgScrollbar->setPos(hdg);
@@ -235,7 +235,7 @@ GUIMain::GUIMain(IrrlichtDevice* device, Lang* language)
         guiTime = currentTime;
         guiPaused = paused;
         guiCollided = collided;
-
+        guiSunk = sunk;
         //update EBL Data
         this->guiRadarEBLBrg = guiRadarEBLBrg;
         this->guiRadarEBLRangeNm = guiRadarEBLRangeNm;
@@ -330,6 +330,9 @@ GUIMain::GUIMain(IrrlichtDevice* device, Lang* language)
             drawCollisionWarning();
         }
 
+        if (guiSunk) {
+            drawSunkWarning();
+        }
         //manually trigger gui event if buttons are held down
         if (eblUpButton->isPressed()) {manuallyTriggerClick(eblUpButton);}
         if (eblDownButton->isPressed()) {manuallyTriggerClick(eblDownButton);}
@@ -429,4 +432,25 @@ GUIMain::GUIMain(IrrlichtDevice* device, Lang* language)
         guienv->getSkin()->getFont()->draw(language->translate("collided"),
             core::rect<s32>(screenCentreX-0.25*su,screenCentreY-0.025*sh,screenCentreX+0.25*su, screenCentreY+0.025*sh),
             video::SColor(255,255,0,0),true,true);
+    }
+    void GUIMain::drawSunkWarning()
+    {
+        u32 su = device->getVideoDriver()->getScreenSize().Width;
+        u32 sh = device->getVideoDriver()->getScreenSize().Height;
+        s32 screenCentreX = 0.5*su;
+        s32 screenCentreY;
+        if (showInterface) {
+            screenCentreY = 0.3*sh;
+        } else {
+            screenCentreY = 0.5*sh;
+        }
+
+        device->getVideoDriver()->draw2DRectangle(video::SColor(255,255,255,255),core::rect<s32>(screenCentreX-0.25*su,screenCentreY-0.025*sh,screenCentreX+0.25*su, screenCentreY+0.025*sh));
+        guienv->getSkin()->getFont()->draw(language->translate("Sunk"),
+            core::rect<s32>(screenCentreX-0.25*su,screenCentreY-0.025*sh,screenCentreX+0.25*su, screenCentreY+0.025*sh),
+            video::SColor(255,255,0,0),true,true);  
+    }
+    void GUIMain::quitSim()
+    {
+        device->closeDevice();
     }

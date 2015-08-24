@@ -330,13 +330,13 @@ void OwnShip::update(irr::f32 deltaTime, irr::f32 scenarioTime, irr::f32 tideHei
     if(hdg<0) {hdg+=360;}
 
     //move, according to heading and speed
-    if (!positionManuallyUpdated) { //If the position has already been updated, skip (for this loop only)
+    if (!positionManuallyUpdated && !this->sunk) { //If the position has already been updated, skip (for this loop only)
         xPos = xPos + sin(hdg*core::DEGTORAD)*spd*deltaTime;
         zPos = zPos + cos(hdg*core::DEGTORAD)*spd*deltaTime;
-    } else {
+    } else if(!this->sunk) {
         positionManuallyUpdated = false;
     }
-    yPos = tideHeight;
+
 
     //calculate pitch and roll - not linked to water/wave motion
     if (pitchPeriod>0)
@@ -344,6 +344,17 @@ void OwnShip::update(irr::f32 deltaTime, irr::f32 scenarioTime, irr::f32 tideHei
     if (rollPeriod>0)
         {roll = weather*rollAngle*sin(scenarioTime*2*PI/rollPeriod);}
 
+
+    if(this->sunk){
+        std::cout << "Sunk!!" << "\n";
+        xPos = xPos;
+        yPos = yPos;
+        yPos = yPos - 10;
+        pitch = 10;
+    }
+    else{
+        yPos = tideHeight;
+    }
     //Set position & angles
     ship->setPosition(core::vector3df(xPos,yPos,zPos));
     ship->setRotation(Angles::irrAnglesFromYawPitchRoll(hdg,pitch,roll));
@@ -364,4 +375,3 @@ std::string OwnShip::getRadarConfigFile() const
 {
     return radarConfigFile;
 }
-
